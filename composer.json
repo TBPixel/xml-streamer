@@ -1,0 +1,26 @@
+{
+    "name": "tbpixel/xml-streamer",
+    "description": "Stream XML data and cast types to a provided classmap.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tony Barry",
+            "email": "tonympbarry@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TBPixel\\XMLStreamer\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "symfony/console": "^4.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "phpstan/phpstan": "^0.11.1"
+    }
+}

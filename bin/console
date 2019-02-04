@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+// Create console application
+$app = new Application();
+
+// Register console commands
+
+// Execute console app
+$app->run();

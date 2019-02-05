@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testdata>
+    <record>
+        <id>1</id>
+        <first_name>Celina</first_name>
+        <last_name>Elgey</last_name>
+        <email>celgey0@purevolume.com</email>
+        <gender>Female</gender>
+        <ip_address>26.110.129.53</ip_address>
+    </record>
+    <record>
+        <id>2</id>
+        <first_name>Theodor</first_name>
+        <last_name>Blanch</last_name>
+        <email>tblanch1@bloomberg.com</email>
+        <gender>Male</gender>
+        <ip_address>34.246.226.138</ip_address>
+    </record>
+</testdata>

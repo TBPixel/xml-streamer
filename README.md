@@ -22,9 +22,9 @@ composer require tbpixel/xml-streamer
 
 ## Purpose
 
-I found myself in need of a way to work with large XML data efficiently. The built in `XMLReader` PHP provides is fast and efficiently, but can be a pain to work with at times. I wanted a dependency-free way to stream XML data and work with it using my provided classmap.
+I found myself in need of a way to work with large XML data efficiently. The built in `XMLReader` PHP provides is fast and efficient, but can be a pain to work with at times. I wanted a dependency-free way to stream XML data and work with it using my provided classmap.
 
-This package attempts to alleviate some of the headache of working with XMLReader, while also providing a collection of PSR-7 compatible XML streams. It offers convenient way to iterate large XML data sets for reduced memory usage.
+This package attempts to alleviate some of the headache of working with XMLReader, while also providing a collection of PSR-7 compatible XML streams. It offers a convenient way to iterate large XML data sets for reduced memory usage.
 
 The optional client is also provided to allow for casting XML Strings to classmap objects.
 
@@ -34,7 +34,7 @@ Say we had an XML file called `users.xml` with the following data:
 
 ```xml
 <?xml version='1.0' encoding='UTF-8'?>
-<user>
+<users>
     <user>
         <id>1</id>
         <name>John Doe</name>

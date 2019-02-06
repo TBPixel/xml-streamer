@@ -43,8 +43,8 @@ final class ClientTest extends TestCase
             'record' => TestRecord::class,
         ]);
 
-        foreach ($client->iterate() as $type) {
-            $this->assertInstanceOf(TestRecord::class, $type);
+        foreach ($client->iterate() as $record) {
+            $this->assertInstanceOf(TestRecord::class, $record);
         }
     }
 }

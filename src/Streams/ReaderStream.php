@@ -231,7 +231,7 @@ abstract class ReaderStream implements StreamInterface
         try {
             while ($this->reader->read()) {
                 // Skip to content depth
-                if ($this->reader->depth < $this->depth) {
+                if ($this->reader->depth !== $this->depth) {
                     continue;
                 }
 

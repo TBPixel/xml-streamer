@@ -41,8 +41,7 @@ Say we had an XML file called `users.xml` with the following data:
     </user>
     <user>
         <id>2</id>
-        <first_name>Theodor</first_name>
-        <last_name>Blanch</last_name>
+        <name>Theodor</name>
     </user>
 </users>
 ```

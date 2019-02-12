@@ -17,8 +17,9 @@ class FileReaderStream extends ReaderStream
      * Construct new FileReaderStream.
      *
      * @param string $file Absolute path to the file.
+     * @param int|string $depth The depth or tag name to start iteration at, defaults to 0.
      */
-    public function __construct(string $file, int $depth = 0)
+    public function __construct(string $file, $depth = 0)
     {
         $this->file = $file;
         parent::__construct($depth);

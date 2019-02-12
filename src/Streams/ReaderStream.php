@@ -15,7 +15,11 @@ abstract class ReaderStream implements StreamInterface
     protected $cursor;
 
     /**
-     * @var int
+     * The starting depth of the stream.
+     *
+     * If an integer is supplied the starting depth will iterate until it meets that depth; if a string is supplied then the reader will iterate until it finds that tag and set that to the depth.
+     *
+     * @var int|string
      */
     protected $depth;
 
@@ -35,10 +39,12 @@ abstract class ReaderStream implements StreamInterface
 
     /**
      * Construct new FileReaderStream.
+     *
+     * @param int|string $depth The depth or starting tag of the reader stream
      */
-    public function __construct(int $depth = 0)
+    public function __construct($depth = 0)
     {
-        $this->depth = $depth;
+        $this->setDepth($depth);
         $this->reader = $this->newXMLReader();
         $this->cursor = $this->newCursor();
         $this->meta = $this->resolveMeta();
@@ -228,14 +234,29 @@ abstract class ReaderStream implements StreamInterface
      */
     public function read($length)
     {
+        $depth = 0;
+
         try {
             while ($this->reader->read()) {
-                // Skip to content depth
-                if ($this->reader->depth !== $this->depth) {
+
+                // Iterate nodes only
+                if ($this->reader->nodeType !== \XMLReader::ELEMENT) {
                     continue;
                 }
 
-                if ($this->reader->nodeType !== \XMLReader::ELEMENT) {
+                // Set depth to int
+                if (is_int($this->depth)) {
+                    $depth = $this->depth;
+                }
+
+                // Iterate depth recursively until node found.
+                if (is_string($this->depth) && $this->reader->name !== $this->depth) {
+                    $depth++;
+                    continue;
+                }
+
+                // Skip to content depth
+                if ($this->reader->depth !== $depth) {
                     continue;
                 }
 
@@ -256,6 +277,8 @@ abstract class ReaderStream implements StreamInterface
         } catch (\Throwable $err) {
             throw new \RuntimeException($err->getMessage(), $err->getCode(), $err);
         }
+
+        return '';
     }
 
     /**
@@ -295,6 +318,33 @@ abstract class ReaderStream implements StreamInterface
         }
 
         return $this->meta;
+    }
+
+    /**
+     * Sets the depth of the reader stream.
+     *
+     * @param int|string $depth
+     *
+     * @return void
+     */
+    protected function setDepth($depth)
+    {
+        if (!is_int($depth) && !is_string($depth)) {
+            throw new \InvalidArgumentException('Reader depth must be either an integer or a string tag name, ' . gettype($depth) . ' given.');
+        }
+
+        if (is_string($depth)) {
+            if (empty($depth)) {
+                throw new \InvalidArgumentException('Reader depth cannot be an empty string!');
+            }
+
+            if (is_numeric($depth)) {
+                $depth = (int) $depth;
+                $depth = ($depth > 0) ? $depth : 0;
+            }
+        }
+
+        $this->depth = $depth;
     }
 
     /**

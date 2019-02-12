@@ -16,7 +16,14 @@ class StringReaderStream extends ReaderStream
      */
     private $encoding;
 
-    public function __construct(string $body, string $encoding = 'UTF-8', int $depth = 0)
+    /**
+     * Construct a new StringReaderStream.
+     *
+     * @param string $body The XML string body.
+     * @param string $encoding The encoding format to use, defaults to 'UTF-8'
+     * @param int|string $depth The depth or tag name to start iteration at.
+     */
+    public function __construct(string $body, string $encoding = 'UTF-8', $depth = 0)
     {
         $this->body = $body;
         $this->encoding = $encoding;

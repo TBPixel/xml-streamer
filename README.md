@@ -59,6 +59,27 @@ foreach ($client->iterate() as $simpleXMLElement) {
 $client->close(); // Closes the client's provided stream
 ```
 
+#### Iteration Depth
+
+ReaderStream, the underlying XMLReader wrapper for the stream implementations found in this package, contains a final constructor argument called `$depth`. This is an integer (default to 0) or string which represents a depth to start iterating records found in an XML document.
+
+The string can be the name of an XML tag, allowing the stream to iterate until it finds the tag rather than having to know the depth in advance.
+
+Given the same data as above, we could rewrite our code snippet as follows:
+
+```php
+$stream = new \TBPixel\XMLStreamer\Streams\FileReaderStream('users.xml', 'users');
+$client = new \TBPixel\XMLStreamer\Client($stream);
+
+foreach ($client->iterate() as $simpleXMLElement) {
+    // Do something with the SimpleXMLElement
+}
+
+$client->close(); // Closes the client's provided stream
+```
+
+The default value of 0 was previously acceptable for iterating this result set, but if the data was wrapped an arbitrary number of levels deep then this tag-name approach becomes convenient.
+
 ### Automatic Casting
 
 If we had a user which implemented the required `CreateFromSimpleXML` interface, we could also cast the `SimpleXMLElement` as we iterate for easier access.

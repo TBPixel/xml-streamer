@@ -44,4 +44,9 @@ class StringReaderStream extends ReaderStream
             throw new \RuntimeException($err->getMessage(), $err->getCode(), $err);
         }
     }
+
+    protected function sizeInBytes(): int
+    {
+        return strlen($this->body);
+    }
 }

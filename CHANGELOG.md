@@ -2,6 +2,10 @@
 
 All notable changes to `tbpixel/xml-streamer` will be documented in this file.
 
+## 1.1.2 - 2019-02-14
+
+- Resolves issue #8, fixing stream size calculation and adjusting tests accordingly.
+
 ## 1.1.1 - 2019-02-13
 
 - Resolves issue #6, adding `__destruct` magic method to ReaderStream to close stream on object destruct.

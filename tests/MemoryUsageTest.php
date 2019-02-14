@@ -16,13 +16,6 @@ final class MemoryUsageTest extends TestCase
      */
     private $client;
 
-    /**
-     * The maximum allowed memory usage.
-     *
-     * @var int
-     */
-    private $maxMemory;
-
     protected function setUp(): void
     {
         $stream = new FileReaderStream(__DIR__ . '/assets/3MB-test-data.xml', 1);
@@ -30,8 +23,6 @@ final class MemoryUsageTest extends TestCase
         $this->client = new Client($stream, [
             'track' => TestTrack::class,
         ]);
-
-        $this->maxMemory = memory_get_usage() + filesize(__DIR__ . '/assets/3MB-test-data.xml');
     }
 
     protected function tearDown(): void
@@ -42,10 +33,14 @@ final class MemoryUsageTest extends TestCase
     /** @test */
     public function ensure_low_memoy_usage()
     {
+        $filesize = filesize(__DIR__ . '/assets/3MB-test-data.xml');
+        $maxMemory = memory_get_usage() + $filesize;
+        $peak = memory_get_peak_usage();
+
         foreach ($this->client->iterate() as $type) {
             // Allows us to check for totaly memory usage.
         }
 
-        $this->assertLessThanOrEqual($this->maxMemory, memory_get_peak_usage());
+        $this->assertLessThan($filesize, $maxMemory - $peak);
     }
 }

@@ -25,11 +25,6 @@ class FileReaderStream extends ReaderStream
         parent::__construct($depth);
     }
 
-    /**
-     * Attempts to open a file with the reader, throwing a runtime exception if unable to.
-     *
-     * @throws \RuntimeException
-     */
     protected function newXMLReader(): \XMLReader
     {
         try {
@@ -43,5 +38,16 @@ class FileReaderStream extends ReaderStream
         } catch (\Throwable $err) {
             throw new \RuntimeException($err->getMessage(), $err->getCode(), $err);
         }
+    }
+
+    protected function sizeInBytes(): int
+    {
+        $size = filesize($this->file);
+
+        if (!$size) {
+            return 0;
+        }
+
+        return $size;
     }
 }

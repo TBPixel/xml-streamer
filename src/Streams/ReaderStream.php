@@ -46,8 +46,10 @@ abstract class ReaderStream implements StreamInterface
     {
         $this->setDepth($depth);
         $this->reader = $this->newXMLReader();
+        $this->meta = [
+            'size' => $this->sizeInBytes(),
+        ];
         $this->cursor = $this->newCursor();
-        $this->meta = $this->resolveMeta();
     }
 
     /**
@@ -56,6 +58,11 @@ abstract class ReaderStream implements StreamInterface
      * @throws \RuntimeException
      */
     abstract protected function newXMLReader(): \XMLReader;
+
+    /**
+     * Returns the size of the read stream.
+     */
+    abstract protected function sizeInBytes(): int;
 
     /**
      * Closes the stream when the destructed
@@ -115,7 +122,7 @@ abstract class ReaderStream implements StreamInterface
      */
     public function getSize()
     {
-        $this->getMetadata('size');
+        return $this->getMetadata('size');
     }
 
     /**
@@ -360,32 +367,8 @@ abstract class ReaderStream implements StreamInterface
      */
     protected function newCursor(): Cursor
     {
-        $reader = $this->newXMLReader();
-
-        $maxPosition = 0;
-
-        while ($reader->read()) {
-            $maxPosition++;
-        }
-
-        $reader->close();
-
-        return new Cursor($maxPosition);
-    }
-
-    /**
-     * Resolves and returns the metadata info.
-     */
-    protected function resolveMeta(): array
-    {
-        $size = strlen(
-            $this->reader->readOuterXML()
+        return new Cursor(
+            $this->getSize()
         );
-
-        $this->rewind();
-
-        return [
-            'size' => $size,
-        ];
     }
 }

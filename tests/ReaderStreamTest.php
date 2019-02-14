@@ -65,7 +65,7 @@ abstract class ReaderStreamTest extends TestCase
         $this->assertEquals(2, $this->stream->tell());
 
         $this->stream->seek(0, SEEK_END); // set to end
-        $this->assertEquals(59, $this->stream->tell());
+        $this->assertEquals($this->stream->getSize(), $this->stream->tell());
     }
 
     /** @test */

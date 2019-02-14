@@ -49,7 +49,7 @@ Say we had an XML file called `users.xml` with the following data:
 With this package, we can simply create a new *Client*, pass it a PSR-7 compatible stream, and work with our data using our types.
 
 ```php
-$stream = new \TBPixel\XMLStreamer\Streams\FileReaderStream('users.xml');
+$stream = new \TBPixel\XMLStreamer\Streams\FileReaderStream('users.xml', 1);
 $client = new \TBPixel\XMLStreamer\Client($stream);
 
 foreach ($client->iterate() as $simpleXMLElement) {
@@ -78,7 +78,7 @@ foreach ($client->iterate() as $simpleXMLElement) {
 $client->close(); // Closes the client's provided stream
 ```
 
-The default value of 0 was previously acceptable for iterating this result set, but if the data was wrapped an arbitrary number of levels deep then this tag-name approach becomes convenient.
+The previous value of 1 was acceptable for iterating this result set, but if the data was wrapped an arbitrary number of levels deep then this tag-name approach becomes convenient.
 
 ### Automatic Casting
 

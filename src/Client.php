@@ -4,7 +4,7 @@ namespace TBPixel\XMLStreamer;
 
 use Psr\Http\Message\StreamInterface;
 
-class Client
+class Client implements \IteratorAggregate
 {
     /**
      * The XML Stream.
@@ -48,6 +48,15 @@ class Client
     public function close()
     {
         $this->stream->close();
+    }
+
+    public function getIterator()
+    {
+        foreach ($this->iterate() as $value) {
+            yield $value;
+        }
+
+        $this->stream->rewind();
     }
 
     /**

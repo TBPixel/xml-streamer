@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare (strict_types = 1);
 
 namespace TBPixel\XMLStreamer\Tests;
 
@@ -32,6 +32,16 @@ final class ClientTest extends TestCase
         $client = new Client($this->stream);
 
         foreach ($client->iterate() as $type) {
+            $this->assertInstanceOf(\SimpleXMLElement::class, $type);
+        }
+    }
+
+    /** @test */
+    public function can_loop_test_data()
+    {
+        $client = new Client($this->stream);
+
+        foreach ($client as $type) {
             $this->assertInstanceOf(\SimpleXMLElement::class, $type);
         }
     }

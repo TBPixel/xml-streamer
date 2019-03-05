@@ -46,7 +46,7 @@ Say we had an XML file called `users.xml` with the following data:
 </users>
 ```
 
-With this package, we can simply create a new *Client*, pass it a PSR-7 compatible stream, and work with our data using our types.
+With this package, we can simply create a new _Client_, pass it a PSR-7 compatible stream, and work with our data using our types.
 
 ```php
 $stream = new \TBPixel\XMLStreamer\Streams\FileReaderStream('users.xml', 1);
@@ -57,6 +57,15 @@ foreach ($client->iterate() as $simpleXMLElement) {
 }
 
 $client->close(); // Closes the client's provided stream
+```
+
+We can also loop the client directly, as it implements the `IteratorAggregate` interface.
+
+```php
+// Same as above loop
+foreach ($client as $simpleXMLElement) {
+    // Do something with the SimpleXMLElement
+}
 ```
 
 #### Iteration Depth

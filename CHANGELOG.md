@@ -2,6 +2,10 @@
 
 All notable changes to `tbpixel/xml-streamer` will be documented in this file.
 
+## 1.2.0 - 2019-03-05
+
+- Resolve issue #12, implementing IteratorAggregate onto the client to allow for convenient looping.
+
 ## 1.1.2 - 2019-02-14
 
 - Resolves issue #8, fixing stream size calculation and adjusting tests accordingly.

@@ -31,6 +31,20 @@ abstract class ReaderStream implements StreamInterface
     protected $reader;
 
     /**
+     * Whether the stream is seekable.
+     *
+     * @var bool
+     */
+    protected $seekable;
+
+    /**
+     * Whether the stream was readable.
+     *
+     * @var bool
+     */
+    protected $readable;
+
+    /**
      * Metadata about the stream.
      *
      * @var array
@@ -46,6 +60,8 @@ abstract class ReaderStream implements StreamInterface
     {
         $this->setDepth($depth);
         $this->reader = $this->newXMLReader();
+        $this->readable = true;
+        $this->seekable = true;
         $this->meta = [
             'size' => $this->sizeInBytes(),
         ];
@@ -88,9 +104,13 @@ abstract class ReaderStream implements StreamInterface
      */
     public function __toString()
     {
-        $this->rewind();
+        try {
+            $this->rewind();
 
-        return $this->reader->readString();
+            return $this->getContents();
+        } catch (\RuntimeException $err) {
+            return '';
+        }
     }
 
     /**
@@ -101,6 +121,8 @@ abstract class ReaderStream implements StreamInterface
     public function close()
     {
         $this->reader->close();
+        $this->readable = false;
+        $this->seekable = false;
     }
 
     /**
@@ -153,7 +175,7 @@ abstract class ReaderStream implements StreamInterface
      */
     public function isSeekable()
     {
-        return true;
+        return $this->seekable;
     }
 
     /**
@@ -170,20 +192,26 @@ abstract class ReaderStream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET)
     {
+        if (!$this->isSeekable()) {
+            throw new \RuntimeException('stream is not seekable');
+        }
+
         switch ($whence) {
             case SEEK_SET:
+                $this->rewind();
                 $this->cursor->set($offset);
-                $this->reader->moveToFirstAttribute();
                 break;
             case SEEK_CUR:
+                $this->reader = $this->newXMLReader();
                 $this->cursor->move($offset);
                 break;
             case SEEK_END:
-                $this->cursor->set($this->cursor->max() + $offset);
-                $this->reader->moveToFirstAttribute();
+                $this->rewind();
+                $this->cursor->backwards()->move($offset);
                 break;
         }
 
+        // NOTE: This iterates by node tree count rather than bytes
         for ($i = 0; $i < $this->cursor->position(); $i++) {
             $this->reader->next();
         }
@@ -202,7 +230,8 @@ abstract class ReaderStream implements StreamInterface
     public function rewind()
     {
         $this->cursor->reset();
-        $this->reader->moveToFirstAttribute();
+        $this->reader->close();
+        $this->reader = $this->newXMLReader();
     }
 
     /**
@@ -234,7 +263,7 @@ abstract class ReaderStream implements StreamInterface
      */
     public function isReadable()
     {
-        return true;
+        return $this->readable;
     }
 
     /**
@@ -249,10 +278,19 @@ abstract class ReaderStream implements StreamInterface
      */
     public function read($length)
     {
+        if (!$this->isReadable()) {
+            throw new \RuntimeException('stream is not readable');
+        }
+
         $depth = 0;
 
         try {
             while ($this->reader->read()) {
+
+                // Prevent negative reads
+                if ($depth < 0) {
+                    return '';
+                }
 
                 // Iterate nodes only
                 if ($this->reader->nodeType !== \XMLReader::ELEMENT) {
@@ -271,7 +309,7 @@ abstract class ReaderStream implements StreamInterface
                 }
 
                 // Skip to content depth
-                if ($this->reader->depth !== $depth) {
+                if ($this->reader->depth < $depth) {
                     continue;
                 }
 
@@ -342,7 +380,7 @@ abstract class ReaderStream implements StreamInterface
      *
      * @return void
      */
-    protected function setDepth($depth)
+    private function setDepth($depth)
     {
         if (!is_int($depth) && !is_string($depth)) {
             throw new \InvalidArgumentException('Reader depth must be either an integer or a string tag name, ' . gettype($depth) . ' given.');
@@ -354,7 +392,7 @@ abstract class ReaderStream implements StreamInterface
             }
 
             if (is_numeric($depth)) {
-                $depth = (int) $depth;
+                $depth = (int)$depth;
                 $depth = ($depth > 0) ? $depth : 0;
             }
         }
@@ -365,7 +403,7 @@ abstract class ReaderStream implements StreamInterface
     /**
      * Create a new cursor.
      */
-    protected function newCursor(): Cursor
+    private function newCursor(): Cursor
     {
         return new Cursor(
             $this->getSize()

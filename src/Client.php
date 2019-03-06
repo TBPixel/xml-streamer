@@ -62,7 +62,7 @@ class Client implements \IteratorAggregate
     /**
      * Casts a SimpleXMLElement to a given object by classname, or returns simple xml element if unavailable.
      */
-    protected function cast(\SimpleXMLElement $element): object
+    private function cast(\SimpleXMLElement $element): object
     {
         if (!isset($this->classmap[$element->getName()])) {
             return $element;

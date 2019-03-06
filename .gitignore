@@ -3,3 +3,6 @@ composer.phar
 
 # PHP Dev cache files
 .php*
+
+# Infection mutation testing
+infection.log

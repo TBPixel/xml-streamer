@@ -43,6 +43,16 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
+    public function can_collect_test_data()
+    {
+        $client = new Client($this->stream);
+        $items = $client->collect();
+
+        $this->assertIsArray($items);
+        $this->assertCount(2, $items);
+    }
+
+    /** @test */
     public function can_loop_test_data()
     {
         $items = [];

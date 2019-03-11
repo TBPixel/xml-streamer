@@ -41,6 +41,20 @@ class Client implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Collects all iterable items into an array.
+     */
+    public function collect(): array
+    {
+        $items = [];
+
+        foreach ($this->iterate() as $v) {
+            $items[] = $v;
+        }
+
+        return $items;
+    }
+
+    /**
      * Closes the stream from the client.
      *
      * @return void

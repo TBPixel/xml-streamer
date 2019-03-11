@@ -2,7 +2,11 @@
 
 All notable changes to `tbpixel/xml-streamer` will be documented in this file.
 
-## 1.3.0 - 2019-03-06
+## 1.4.0 - 2019-03-11
+
+- Allows the client to be countable, resolving #16.
+
+## 1.3.0 - 2019-03-11
 
 - Implements mutation testing library `infection`.
 - Fixes an issue where the cursor was not wrapping correctly and adds tests.

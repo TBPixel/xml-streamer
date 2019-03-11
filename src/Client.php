@@ -4,7 +4,7 @@ namespace TBPixel\XMLStreamer;
 
 use Psr\Http\Message\StreamInterface;
 
-class Client implements \IteratorAggregate
+class Client implements \IteratorAggregate, \Countable
 {
     /**
      * The XML Stream.
@@ -57,6 +57,19 @@ class Client implements \IteratorAggregate
         }
 
         $this->stream->rewind();
+    }
+
+    public function count()
+    {
+        $i = 0;
+
+        foreach ($this->iterate() as $v) {
+            $i += 1;
+        }
+
+        $this->stream->rewind();
+
+        return $i;
     }
 
     /**

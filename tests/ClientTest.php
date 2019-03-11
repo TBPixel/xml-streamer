@@ -59,6 +59,13 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
+    public function can_count_test_data()
+    {
+        $client = new Client($this->stream);
+        $this->assertCount(2, $client);
+    }
+
+    /** @test */
     public function can_map_records_to_test_data()
     {
         $items = [];

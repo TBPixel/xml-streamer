@@ -55,13 +55,7 @@ final class Cursor
      */
     public function set(int $position): self
     {
-        if ($position < 0) {
-            $this->position = $this->max + $position;
-        } elseif ($position > $this->max) {
-            $this->position = $this->max - $position;
-        } else {
-            $this->position = $position;
-        }
+        $this->position = max(0, min($position, $this->max));
 
         return $this;
     }
@@ -71,7 +65,17 @@ final class Cursor
      */
     public function move(int $distance): self
     {
-        return $this->set($this->position + $distance);
+        $pos = $this->position + $distance;
+        $range = $this->max + 1;
+
+        if ($pos < 0) {
+            $pos = -$pos % $range;
+            $pos = $this->max - ($pos - 1);
+        } elseif ($pos > $this->max) {
+            $pos = $distance % $range;
+        }
+
+        return $this->set($pos);
     }
 
     /**

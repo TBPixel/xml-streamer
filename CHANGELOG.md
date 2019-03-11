@@ -2,6 +2,14 @@
 
 All notable changes to `tbpixel/xml-streamer` will be documented in this file.
 
+## 1.3.0 - 2019-03-06
+
+- Implements mutation testing library `infection`.
+- Fixes an issue where the cursor was not wrapping correctly and adds tests.
+- Fixes an issue where the `XMLReader` based streams did not properly rewind.
+- Fixes an issue where `__toString` may throw an exception.
+- Fixes an issue where iterating by tag name only returned the first result.
+
 ## 1.2.0 - 2019-03-05
 
 - Resolve issue #12, implementing IteratorAggregate onto the client to allow for convenient looping.

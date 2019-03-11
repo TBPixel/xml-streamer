@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace TBPixel\XMLStreamer\Tests;
 
@@ -8,7 +8,7 @@ final class TagDepthTest extends ReaderStreamTest
 {
     protected function newStream(): \Psr\Http\Message\StreamInterface
     {
-        return new FileReaderStream(__DIR__ . '/assets/test-data.xml', 'testdata');
+        return new FileReaderStream(__DIR__ . '/assets/test-data.xml', 'record');
     }
 
     /** @test */
@@ -17,6 +17,7 @@ final class TagDepthTest extends ReaderStreamTest
         $stream = new FileReaderStream(__DIR__ . '/assets/test-data.xml', 'fake-tag');
         $empty = $stream->read(0);
 
+        $this->assertIsString($empty);
         $this->assertEmpty($empty);
     }
 }

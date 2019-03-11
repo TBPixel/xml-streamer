@@ -293,7 +293,7 @@ abstract class ReaderStream implements StreamInterface
                 }
 
                 // Iterate nodes only
-                if ($this->reader->nodeType !== \XMLReader::ELEMENT) {
+                if ($this->reader->nodeType !== \XMLReader::ELEMENT && $this->reader->nodeType !== \XMLReader::END_ELEMENT) {
                     continue;
                 }
 
@@ -309,7 +309,7 @@ abstract class ReaderStream implements StreamInterface
                 }
 
                 // Skip to content depth
-                if ($this->reader->depth < $depth) {
+                if (is_int($this->depth) && $this->reader->depth < $depth) {
                     continue;
                 }
 

@@ -55,11 +55,15 @@ abstract class ReaderStreamTest extends TestCase
     public function can_read()
     {
         $this->assertTrue($this->stream->isReadable());
+        $count = 0;
 
-        $data = $this->stream->read(1024);
+        while (!empty($data = $this->stream->read(0))) {
+            $count += 1;
+            $this->assertIsString($data);
+            $this->assertNotEmpty($data);
+        }
 
-        $this->assertIsString($data);
-        $this->assertNotEmpty($data);
+        $this->assertEquals(2, $count);
     }
 
     /** @test */

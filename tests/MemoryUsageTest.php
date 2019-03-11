@@ -18,7 +18,7 @@ final class MemoryUsageTest extends TestCase
 
     protected function setUp(): void
     {
-        $stream = new FileReaderStream(__DIR__ . '/assets/3MB-test-data.xml', 1);
+        $stream = new FileReaderStream(__DIR__ . '/assets/3MB-test-data.xml', 'track');
 
         $this->client = new Client($stream, [
             'track' => TestTrack::class,
@@ -36,11 +36,14 @@ final class MemoryUsageTest extends TestCase
         $filesize = filesize(__DIR__ . '/assets/3MB-test-data.xml');
         $maxMemory = memory_get_usage() + $filesize;
         $peak = memory_get_peak_usage();
+        $count = 0;
 
         foreach ($this->client->iterate() as $type) {
             // Allows us to check for totaly memory usage.
+            $count += 1;
         }
 
         $this->assertLessThan($filesize, $maxMemory - $peak);
+        $this->assertEquals(25000, $count);
     }
 }

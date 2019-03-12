@@ -2,6 +2,10 @@
 
 All notable changes to `tbpixel/xml-streamer` will be documented in this file.
 
+## 1.5.2 - 2019-03-12
+
+- Re-addresses issue #21, resolving it properly this time.
+
 ## 1.5.1 - 2019-03-11
 
 - Resolves an issue where ReaderStream did not iterate every record correctly; fixes #21.

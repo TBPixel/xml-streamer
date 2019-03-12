@@ -282,47 +282,26 @@ abstract class ReaderStream implements StreamInterface
             throw new \RuntimeException('stream is not readable');
         }
 
-        $depth = 0;
-
         try {
             while ($this->reader->read()) {
-
-                // Prevent negative reads
-                if ($depth < 0) {
-                    return '';
-                }
-
-                // Iterate nodes only
-                if ($this->reader->nodeType !== \XMLReader::ELEMENT && $this->reader->nodeType !== \XMLReader::END_ELEMENT) {
+                if ($this->reader->nodeType !== \XMLReader::ELEMENT) {
                     continue;
                 }
 
-                // Set depth to int
-                if (is_int($this->depth)) {
-                    $depth = $this->depth;
+                if (is_int($this->depth) && $this->reader->depth !== $this->depth) {
+                    continue;
                 }
 
-                // Iterate depth recursively until node found.
                 if (is_string($this->depth) && $this->reader->name !== $this->depth) {
-                    $depth++;
                     continue;
                 }
 
-                // Skip to content depth
-                if (is_int($this->depth) && $this->reader->depth < $depth) {
-                    continue;
-                }
-
-                // Get next chunk and append byte length
                 $xml = $this->reader->readOuterXML();
 
-                // Return nothing if next chunk is larger than length.
                 if (($length > 0) && strlen($xml) > $length) {
                     return '';
                 }
 
-                // Move to the next line.
-                $this->reader->next();
                 $this->cursor->forwards();
 
                 return $xml;

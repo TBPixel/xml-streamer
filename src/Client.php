@@ -38,6 +38,8 @@ class Client implements \IteratorAggregate, \Countable
 
             yield $this->cast($xml);
         }
+
+        $this->stream->rewind();
     }
 
     /**
@@ -69,8 +71,6 @@ class Client implements \IteratorAggregate, \Countable
         foreach ($this->iterate() as $value) {
             yield $value;
         }
-
-        $this->stream->rewind();
     }
 
     public function count()
@@ -80,8 +80,6 @@ class Client implements \IteratorAggregate, \Countable
         foreach ($this->iterate() as $v) {
             $i += 1;
         }
-
-        $this->stream->rewind();
 
         return $i;
     }

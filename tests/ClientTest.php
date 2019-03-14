@@ -43,6 +43,21 @@ final class ClientTest extends TestCase
     }
 
     /** @test */
+    public function rewinds_after_iteration()
+    {
+        $items = [];
+        $client = new Client($this->stream);
+
+        for ($i = 0; $i < 2; $i++) {
+            foreach ($client->iterate() as $v) {
+                $items[] = $v;
+            }
+        }
+
+        $this->assertCount(4, $items);
+    }
+
+    /** @test */
     public function can_collect_test_data()
     {
         $client = new Client($this->stream);

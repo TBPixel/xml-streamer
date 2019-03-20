@@ -1,0 +1,26 @@
+language: php
+
+php:
+  - 7.2
+  - 7.3
+
+env:
+  matrix:
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS=""
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  - wget https://github.com/infection/infection/releases/download/0.12.0/infection.phar
+  - wget https://github.com/infection/infection/releases/download/0.12.0/infection.phar.asc
+  - gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 493B4AA0
+  - gpg --with-fingerprint --verify infection.phar.asc infection.phar
+  - chmod +x infection.phar
+
+script:
+  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+  - ./infection.phar --min-msi=60 --threads=4
+
+after_script:
+  - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
